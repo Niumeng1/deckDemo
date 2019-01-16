@@ -1,0 +1,64 @@
+<html>
+<head>
+    <!-- deck.gl standalone bundle -->
+    <!--<script src="https://unpkg.com/deck.gl@^6.2.0/deckgl.min.js"></script>-->
+    <script src="../../js/deckgl.min.js"></script>
+    <!-- Mapbox dependencies: only if base map is needed -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css" rel="stylesheet" />
+
+    <style type="text/css">
+        body {margin: 0; padding: 0;}
+        #container {width: 100vw; height: 100vh;}
+    </style>
+
+
+
+</head>
+
+<body>
+<div id="container"></div>
+</body>
+
+<script type="text/javascript">
+
+
+    const MALE_COLOR = [0, 128, 255];
+    const FEMALE_COLOR = [255, 0, 128];
+    // Source data CSV
+    const DATA_URL =
+        'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/scatterplot/manhattan.json'; // eslint-disable-line
+     const INITIAL_VIEW_STATE = {
+        longitude: -74,
+        latitude: 40.7,
+        zoom: 11,
+        maxZoom: 16,
+        pitch: 0,
+        bearing: 0
+    };
+    const deckgl = new deck.DeckGL({
+        container: 'container',
+        mapboxApiAccessToken: 'pk.eyJ1Ijoic25vd2ZsYWtlMTEiLCJhIjoiY2plZHY1MzIyMDRkZjJ4cXVkenc0N2llcCJ9.YRhx7NDp9QAMNfOkdf3nFA',
+        longitude: -74,
+        latitude: 40.7,
+        zoom: 11,
+        maxZoom: 16,
+        pitch: 0,
+        bearing: 0,
+        layers: [
+            new deck.ScatterplotLayer({
+                id: 'scatter-plot',
+                data:DATA_URL,
+                radiusScale: 30,
+                radiusMinPixels: 0.25,
+                getPosition: d => [d[0], d[1], 0],
+                getColor: d => (d[2] === 1 ? MALE_COLOR : FEMALE_COLOR),
+                getRadius: 1,
+                updateTriggers: {
+                    getColor: [MALE_COLOR, FEMALE_COLOR]
+                }
+            })
+        ]
+    });
+</script>
+</html>
